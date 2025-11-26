@@ -56,6 +56,7 @@ export default function StepPersonalInfo({ formData, setFieldValue, touched, mar
         onBlur={() => markTouched('dob')}
         required
         error={touched.dob && errors.dob}
+        helperText={!errors.dob ? 'Format: YYYY-MM-DD' : undefined}
       />
       <Input
         label="Phone"
@@ -88,7 +89,7 @@ export default function StepPersonalInfo({ formData, setFieldValue, touched, mar
         error={touched.city && errors.city}
         placeholder="Your city"
       />
-      <p className="md:col-span-2 helper-text">Provide accurate personal information as it will be used for your profile.</p>
+      <p className="md:col-span-2 helper-text mt-1">Provide accurate personal information as it will be used for your profile.</p>
     </div>
   );
 }

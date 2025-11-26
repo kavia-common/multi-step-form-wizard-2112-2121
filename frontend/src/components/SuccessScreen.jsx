@@ -1,12 +1,14 @@
 import React from 'react';
 import Card from './common/Card';
-import Button from './common/Button';
 
 /**
  * PUBLIC_INTERFACE
  */
-export default function SuccessScreen({ username, avatarPreview, onReset }) {
-  /** Displays post-submit success with image only per spec (no username/details). */
+export default function SuccessScreen({ username, avatarPreview }) {
+  /**
+   * Minimal success screen: Only shows success icon, "Profile created" heading,
+   * and the uploaded photo. No buttons or extra prompts.
+   */
   return (
     <Card className="w-full max-w-xl mx-auto p-6 md:p-8">
       <div className="text-center space-y-4">
@@ -30,16 +32,6 @@ export default function SuccessScreen({ username, avatarPreview, onReset }) {
               No image
             </div>
           )}
-        </div>
-
-        <div className="pt-2">
-          <Button
-            variant="primary"
-            onClick={onReset}
-            className="w-full sm:w-auto"
-          >
-            Create another profile
-          </Button>
         </div>
       </div>
     </Card>

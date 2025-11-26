@@ -44,6 +44,7 @@ export default function StepAccount({ formData, setFieldValue, touched, markTouc
             required
             error={touched.password && errors.password}
             placeholder="At least 8 characters"
+            helperText={!errors.password ? 'Use at least 8 characters including letters and numbers.' : undefined}
           />
           <button
             type="button"
@@ -76,7 +77,6 @@ export default function StepAccount({ formData, setFieldValue, touched, markTouc
           </button>
         </div>
       </div>
-      <p className="helper-text">Use a strong password with at least 8 characters.</p>
     </div>
   );
 }

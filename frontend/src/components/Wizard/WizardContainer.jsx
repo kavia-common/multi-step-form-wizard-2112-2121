@@ -51,14 +51,11 @@ export default function WizardContainer({
   };
 
   if (submitted) {
+    // Minimal success per spec: no extra actions shown
     return (
       <SuccessScreen
         username={formData.username}
         avatarPreview={formData.avatarPreview}
-        onReset={() => {
-          reset();
-          setSubmitted(false);
-        }}
       />
     );
   }

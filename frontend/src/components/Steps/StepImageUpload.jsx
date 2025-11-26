@@ -42,7 +42,7 @@ export default function StepImageUpload({ formData, setFieldValue, touched, mark
   return (
     <div className="space-y-5">
       <div>
-        <label className="block mb-2">
+        <label htmlFor="avatarFile" className="block mb-1.5">
           Profile Image <span className="text-[color:var(--text-muted)] font-normal">(JPEG/PNG up to 3MB)</span>
         </label>
         <input
@@ -55,10 +55,10 @@ export default function StepImageUpload({ formData, setFieldValue, touched, mark
           onBlur={() => markTouched('avatarFile')}
           className="block w-full text-sm text-[color:var(--text-medium)] file:mr-4 file:h-[46px] file:px-4 file:rounded-[10px] file:border file:border-[#D7DCE8] file:text-sm file:font-medium file:bg-white file:text-[color:var(--text-strong)] hover:file:bg-[#F4F6FB] aria-[invalid=true]:border-[color:var(--danger)]"
           aria-invalid={!!error}
-          aria-describedby={error ? 'avatarFile-error' : undefined}
+          aria-describedby={error ? 'avatarFile-error' : 'avatarFile-help'}
         />
         {!error && (
-          <p className="helper-text mt-1">Upload a clear square image for best results.</p>
+          <p id="avatarFile-help" className="helper-text mt-1">Upload a clear square image for best results.</p>
         )}
         {error && (
           <p id="avatarFile-error" className="field-error">
