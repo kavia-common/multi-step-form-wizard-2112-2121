@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Minimal global styles aligned with Ocean Professional theme */
+/* Ocean Professional theme globals */
 :root {
   --ocean-bg: #f9fafb;
   --ocean-surface: #ffffff;
@@ -23,7 +23,29 @@ body {
 }
 
 @layer base {
-  h1 { @apply text-3xl md:text-4xl font-semibold text-text; }
+  /* Typography scale */
+  h1 { @apply text-3xl md:text-4xl font-semibold text-text tracking-tight; }
   h2 { @apply text-xl md:text-2xl font-semibold text-text; }
+  h3 { @apply text-lg font-semibold text-text; }
   p  { @apply text-sm text-gray-600; }
+
+  /* Link styling */
+  a { @apply text-primary hover:underline; }
+}
+
+@layer components {
+  /* Utility card visual for consistency */
+  .ocean-card {
+    @apply bg-surface rounded-xl border border-gray-100 shadow-soft;
+  }
+
+  /* Input base to unify spacing and focus ring */
+  .ocean-input {
+    @apply block w-full h-12 rounded-[10px] border px-3.5 py-2 shadow-sm focus:outline-none focus:ring-4 transition-colors bg-white text-text placeholder:text-gray-400;
+  }
+
+  /* Button base normalization for cross-app consistency */
+  .ocean-btn {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm;
+  }
 }

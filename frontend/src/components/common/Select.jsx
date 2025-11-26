@@ -28,11 +28,10 @@ export default function Select({
         onChange={onChange}
         onBlur={onBlur}
         className={cn(
-          'block w-full h-12 rounded-[10px] border px-3.5 py-2 shadow-sm focus:outline-none focus:ring-4 transition-colors',
+          'ocean-input',
           error
             ? 'border-error focus:ring-red-200'
-            : 'border-[#D7DCE8] focus:border-primary focus:ring-blue-200',
-          'bg-white text-text'
+            : 'border-[#D7DCE8] focus:border-primary focus:ring-blue-200'
         )}
         aria-invalid={!!error}
         aria-describedby={error ? `${name}-error` : undefined}

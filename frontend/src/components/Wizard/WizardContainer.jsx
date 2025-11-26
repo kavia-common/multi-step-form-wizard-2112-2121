@@ -3,6 +3,7 @@ import Card from '../common/Card';
 import ProgressBar from './ProgressBar';
 import WizardNav from './WizardNav';
 import Alert from '../common/Alert';
+import SuccessScreen from '../SuccessScreen';
 
 // PUBLIC_INTERFACE
 export default function WizardContainer({
@@ -46,31 +47,19 @@ export default function WizardContainer({
     setSubmitting(false);
     if (result.ok) {
       setSubmitted(true);
-      // optional: clear storage but keep data for review
     }
   };
 
   if (submitted) {
     return (
-      <Card className="w-full max-w-xl mx-auto p-6 md:p-8">
-        <div className="text-center space-y-3">
-          <div className="mx-auto w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-            <svg className="w-7 h-7 text-green-600" viewBox="0 0 24 24" fill="none">
-              <path d="M20 7L9 18l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <h1 className="text-2xl font-semibold text-text">All set!</h1>
-          <p className="text-gray-600">Your information was submitted successfully.</p>
-          <div className="pt-2">
-            <button
-              onClick={() => { reset(); setSubmitted(false); }}
-              className="text-primary hover:underline font-medium"
-            >
-              Submit another response
-            </button>
-          </div>
-        </div>
-      </Card>
+      <SuccessScreen
+        username={formData.username}
+        avatarPreview={formData.avatarPreview}
+        onReset={() => {
+          reset();
+          setSubmitted(false);
+        }}
+      />
     );
   }
 

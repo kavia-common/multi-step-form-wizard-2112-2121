@@ -7,7 +7,7 @@ export default function Card({ children, className }) {
   return (
     <div
       className={cn(
-        'bg-surface rounded-xl border border-gray-100 shadow-[0_10px_25px_-10px_rgba(31,41,55,0.18)]',
+        'ocean-card',
         className
       )}
     >
