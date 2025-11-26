@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Input from '../common/Input';
 import Select from '../common/Select';
+import { lookupPincode } from '../../utils/pincode';
 
 // PUBLIC_INTERFACE
 export default function StepPersonal({ formData, setFieldValue, touched, markTouched, errors }) {
-  /** Collect comprehensive personal details including name, gender, nationality, address, and ID. */
+  /** Collect personal details including name, gender, nationality, and address with pincode auto-fill for district/taluk. */
   const genderOptions = [
     { value: 'male', label: 'Male' },
     { value: 'female', label: 'Female' },
@@ -13,11 +14,37 @@ export default function StepPersonal({ formData, setFieldValue, touched, markTou
     { value: 'other', label: 'Other' },
   ];
 
-  const idTypeOptions = [
-    { value: 'national-id', label: 'National ID' },
-    { value: 'passport', label: 'Passport' },
-    { value: 'driver-license', label: 'Driver License' },
-  ];
+  // track if user manually overrides autofilled district/taluk
+  const [overrideDistrict, setOverrideDistrict] = useState(false);
+  const [overrideTaluk, setOverrideTaluk] = useState(false);
+
+  // Memoized clean pincode value
+  const cleanPincode = useMemo(() => String(formData.postalCode || '').replace(/\D/g, ''), [formData.postalCode]);
+
+  useEffect(() => {
+    // Auto-lookup when pincode becomes valid length (6 typical for IN) or present in dataset
+    async function doLookup() {
+      if (!cleanPincode || cleanPincode.length < 5) return; // basic threshold
+      const result = await lookupPincode(cleanPincode);
+      if (result && !overrideDistrict && !formData.district) {
+        setFieldValue('district', result.district);
+      }
+      if (result && !overrideTaluk && !formData.taluk) {
+        setFieldValue('taluk', result.taluk);
+      }
+    }
+    doLookup();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cleanPincode]);
+
+  const onDistrictChange = (e) => {
+    setOverrideDistrict(true);
+    setFieldValue('district', e.target.value);
+  };
+  const onTalukChange = (e) => {
+    setOverrideTaluk(true);
+    setFieldValue('taluk', e.target.value);
+  };
 
   return (
     <div className="grid grid-cols-1 gap-6">
@@ -76,26 +103,25 @@ export default function StepPersonal({ formData, setFieldValue, touched, markTou
           placeholder="e.g., United States"
         />
         <div className="grid grid-cols-2 gap-4">
-          <Select
-            label="ID Type"
-            name="idType"
-            value={formData.idType}
-            onChange={(e) => setFieldValue('idType', e.target.value)}
-            onBlur={() => markTouched('idType')}
+          <Input
+            label="District"
+            name="district"
+            value={formData.district}
+            onChange={onDistrictChange}
+            onBlur={() => markTouched('district')}
             required
-            error={touched.idType && errors.idType}
-            options={idTypeOptions}
-            placeholder="Select ID type"
+            error={touched.district && errors.district}
+            placeholder="Auto-filled from pincode"
           />
           <Input
-            label="ID Number"
-            name="idNumber"
-            value={formData.idNumber}
-            onChange={(e) => setFieldValue('idNumber', e.target.value)}
-            onBlur={() => markTouched('idNumber')}
+            label="Taluk"
+            name="taluk"
+            value={formData.taluk}
+            onChange={onTalukChange}
+            onBlur={() => markTouched('taluk')}
             required
-            error={touched.idNumber && errors.idNumber}
-            placeholder="Enter ID number"
+            error={touched.taluk && errors.taluk}
+            placeholder="Auto-filled from pincode"
           />
         </div>
       </div>
@@ -145,6 +171,11 @@ export default function StepPersonal({ formData, setFieldValue, touched, markTou
               placeholder="90001"
             />
           </div>
+          {(touched.postalCode && !errors.postalCode) && (
+            <p className="text-xs text-gray-500">
+              If district/taluk did not auto-fill or are incorrect, you can edit them manually.
+            </p>
+          )}
         </div>
       </div>
     </div>

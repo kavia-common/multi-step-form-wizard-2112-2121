@@ -67,9 +67,6 @@ export default function StepContact({ formData, setFieldValue, touched, markTouc
           )}
         </div>
       </div>
-      <p className="text-xs text-gray-500">
-        Tip: Phone length is validated based on the selected country.
-      </p>
     </div>
   );
 }

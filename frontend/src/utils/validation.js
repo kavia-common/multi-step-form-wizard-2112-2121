@@ -1,4 +1,4 @@
-/**
+ /**
  * Basic validation helpers and step schemas for the wizard.
  */
 
@@ -9,7 +9,7 @@ export const required = (msg = 'This field is required') => (value) =>
 // PUBLIC_INTERFACE
 export const email = (msg = 'Please enter a valid email address') => (value) => {
   if (value === undefined || value === null || String(value).trim() === '') return msg;
-  const re = /^[^\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(String(value).toLowerCase()) ? null : msg;
 };
 
@@ -63,7 +63,7 @@ export const phoneDigitsForCountry = (getIsoFn, msg = 'Invalid phone length') =>
    */
   const iso = getIsoFn?.();
   const rule = iso ? COUNTRY_PHONE_RULES[iso] : null;
-  const digits = String(value || '').replace(/\\D/g, '');
+  const digits = String(value || '').replace(/\D/g, '');
   if (!digits) return 'This field is required';
   if (!rule) {
     // Fallback: basic min length
@@ -103,12 +103,13 @@ export const stepSchemas = {
     lastName: [required()],
     gender: [inList(['male', 'female', 'non-binary', 'prefer_not_to_say', 'other'], 'Please select a gender')],
     nationality: [required()],
-    idType: [inList(['national-id', 'passport', 'driver-license'], 'Please select an ID type')],
-    idNumber: [required()],
+    // ID fields removed per requirements
     street: [required()],
     city: [required()],
     state: [required()],
     postalCode: [required()],
+    district: [required()],
+    taluk: [required()],
   },
   contact: {
     email: [required(), email()],
