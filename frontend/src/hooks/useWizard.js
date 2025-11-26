@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { stepSchemas, validateSchema } from '../utils/validation';
+import { stepSchemas, validateSchema, getContactSchema } from '../utils/validation';
 
-const STORAGE_KEY = 'wizard_form_data_v1';
+const STORAGE_KEY = 'wizard_form_data_v2';
 
 // PUBLIC_INTERFACE
 export function useWizard(steps) {
@@ -57,18 +57,29 @@ export function useWizard(steps) {
     setInteracted(true);
   }, []);
 
+  const schemaForKey = useCallback(
+    (key) => {
+      if (key === 'contact') {
+        const getIso = () => formData.phoneCountry;
+        return getContactSchema(getIso);
+      }
+      return stepSchemas[key] || {};
+    },
+    [formData.phoneCountry]
+  );
+
   const validateCurrent = useCallback(() => {
-    const schema = stepSchemas[currentKey] || {};
+    const schema = schemaForKey(currentKey);
     const result = validateSchema(schema, formData);
     setErrors(result);
     return result;
-  }, [currentKey, formData]);
+  }, [currentKey, formData, schemaForKey]);
 
   const isStepValid = useMemo(() => {
-    const schema = stepSchemas[currentKey] || {};
+    const schema = schemaForKey(currentKey);
     const result = validateSchema(schema, formData);
     return Object.values(result).every((v) => !v);
-  }, [currentKey, formData]);
+  }, [currentKey, formData, schemaForKey]);
 
   const next = useCallback(() => {
     // Mark that a navigation attempt was made
