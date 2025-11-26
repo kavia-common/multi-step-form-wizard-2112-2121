@@ -4,7 +4,7 @@ import Select from '../common/Select';
 import { getCountryList, getDialCode } from '../../utils/validation';
 
 // PUBLIC_INTERFACE
-export default function StepContact({ formData, setFieldValue, touched, markTouched, errors }) {
+export default function StepContact({ formData, setFieldValue, touched, markTouched, errors, isEditMode = false, onSaveFromEdit }) {
   /** Collect email and phone with country code selection and validation. */
   const countries = getCountryList();
   const dialCode = getDialCode(formData.phoneCountry);
@@ -67,6 +67,17 @@ export default function StepContact({ formData, setFieldValue, touched, markTouc
           )}
         </div>
       </div>
+      {isEditMode && (
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={onSaveFromEdit}
+            className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition-colors bg-primary text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Save
+          </button>
+        </div>
+      )}
     </div>
   );
 }

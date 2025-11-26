@@ -107,7 +107,7 @@ export const stepSchemas = {
     street: [required()],
     city: [required()],
     state: [required()],
-    postalCode: [required()],
+    postalCode: [], // optional pincode
     district: [required()],
     taluk: [required()],
   },
@@ -115,13 +115,11 @@ export const stepSchemas = {
     email: [required(), email()],
     phoneCountry: [required('Select a country')],
     phone: [
-      // phoneDigitsForCountry will be bound at runtime by useWizard with current form state
-      // placeholder; see getContactSchema function below
+      // phoneDigitsForCountry is added via getContactSchema at runtime
     ],
   },
-  preferences: {
-    preference: [required()],
-    // toggles optional by default
+  additional: {
+    // placeholder - no required fields
   },
 };
 

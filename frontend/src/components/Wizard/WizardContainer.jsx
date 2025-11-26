@@ -15,6 +15,7 @@ export default function WizardContainer({
    */
   const {
     currentStep,
+    setCurrentStep,
     formData,
     setFieldValue,
     touched,
@@ -37,9 +38,13 @@ export default function WizardContainer({
 
   const Current = useMemo(() => steps[currentStep].component, [steps, currentStep]);
 
+  // Track when we came from review to edit a section
+  const [editReturnToReview, setEditReturnToReview] = useState(false);
+  const [confirmChecked, setConfirmChecked] = useState(false);
+
   const onSubmit = async () => {
     setSubmitting(true);
-    const result = await submit();
+    const result = await submit({ confirmChecked });
     setSubmitting(false);
     if (result.ok) {
       setSubmitted(true);
@@ -97,8 +102,21 @@ export default function WizardContainer({
           touched={touched}
           markTouched={markTouched}
           errors={errors}
-          jumpTo={jumpTo}
+          jumpTo={(idx) => {
+            setEditReturnToReview(true);
+            jumpTo(idx);
+          }}
           canJumpTo={canJumpTo}
+          isEditMode={editReturnToReview && currentStep !== steps.length - 1}
+          onSaveFromEdit={() => {
+            // Validate current step; if valid, return to review (last step)
+            if (isStepValid) {
+              setCurrentStep(steps.length - 1);
+              setEditReturnToReview(false);
+            }
+          }}
+          confirmChecked={confirmChecked}
+          setConfirmChecked={setConfirmChecked}
         />
 
         {showGenericBanner && (
@@ -110,11 +128,23 @@ export default function WizardContainer({
         <WizardNav
           currentStep={currentStep}
           totalSteps={total}
-          onBack={back}
-          onNext={next}
+          onBack={() => {
+            if (currentStep === total - 1) {
+              // going back from review clears edit-return flag
+              setEditReturnToReview(false);
+            }
+            back();
+          }}
+          onNext={() => {
+            if (currentStep === total - 2) {
+              // moving from Additional Info to Review, reset edit flag
+              setEditReturnToReview(false);
+            }
+            next();
+          }}
           onSubmit={onSubmit}
           isFinal={currentStep === total - 1}
-          canProceed={isStepValid}
+          canProceed={currentStep === total - 1 ? isStepValid && confirmChecked : isStepValid}
           submitting={submitting}
         />
       </div>

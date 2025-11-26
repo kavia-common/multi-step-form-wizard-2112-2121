@@ -30,7 +30,7 @@ export function useWizard(steps) {
   // Track if any field has been interacted with on the current step at least once
   const [interacted, setInteracted] = useState(false);
 
-  const stepKeys = useMemo(() => ['personal', 'contact', 'preferences', 'review'], []);
+  const stepKeys = useMemo(() => ['personal', 'contact', 'additional', 'review'], []);
   const currentKey = stepKeys[currentStep] || stepKeys[0];
 
   // Reset attempt/interacted flags when step changes
@@ -141,7 +141,8 @@ export function useWizard(steps) {
     }
   }, []);
 
-  const submit = useCallback(async () => {
+  const submit = useCallback(async (options = {}) => {
+    const { confirmChecked } = options;
     setAttempted(true);
     const result = validateCurrent();
     const hasErrors = Object.values(result).some(Boolean);
@@ -155,6 +156,10 @@ export function useWizard(steps) {
       });
       setInteracted(true);
       return { ok: false, errors: result };
+    }
+    // If on review step, require confirmation checkbox
+    if (currentKey === 'review' && !confirmChecked) {
+      return { ok: false, errors: { confirm: 'Please confirm before submitting.' } };
     }
     // simulate submit
     await new Promise((r) => setTimeout(r, 400));

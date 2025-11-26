@@ -4,7 +4,7 @@ import Select from '../common/Select';
 import { lookupPincode } from '../../utils/pincode';
 
 // PUBLIC_INTERFACE
-export default function StepPersonal({ formData, setFieldValue, touched, markTouched, errors }) {
+export default function StepPersonal({ formData, setFieldValue, touched, markTouched, errors, isEditMode = false, onSaveFromEdit }) {
   /** Collect personal details including name, gender, nationality, and address with pincode auto-fill for district/taluk. */
   const genderOptions = [
     { value: 'male', label: 'Male' },
@@ -161,12 +161,11 @@ export default function StepPersonal({ formData, setFieldValue, touched, markTou
               placeholder="CA"
             />
             <Input
-              label="Postal Code"
+              label="Pincode"
               name="postalCode"
               value={formData.postalCode}
               onChange={(e) => setFieldValue('postalCode', e.target.value)}
               onBlur={() => markTouched('postalCode')}
-              required
               error={touched.postalCode && errors.postalCode}
               placeholder="90001"
             />
@@ -178,6 +177,18 @@ export default function StepPersonal({ formData, setFieldValue, touched, markTou
           )}
         </div>
       </div>
+
+      {isEditMode && (
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={onSaveFromEdit}
+            className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition-colors bg-primary text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Save
+          </button>
+        </div>
+      )}
     </div>
   );
 }

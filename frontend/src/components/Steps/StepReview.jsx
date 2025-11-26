@@ -2,8 +2,11 @@ import React from 'react';
 import { getDialCode } from '../../utils/validation';
 
 // PUBLIC_INTERFACE
-export default function StepReview({ formData, jumpTo, canJumpTo }) {
-  /** Present review of entered data with links to edit specific steps, grouped nicely. */
+export default function StepReview({ formData, jumpTo, canJumpTo, confirmChecked, setConfirmChecked }) {
+  /** 
+   * Review step: presents grouped summary with Edit buttons to navigate back to a step.
+   * Includes a confirmation checkbox that must be checked to enable submission (handled in WizardContainer).
+   */
   const phoneDisplay = formData.phone ? `${getDialCode(formData.phoneCountry)} ${formData.phone}` : '—';
 
   const entries = [
@@ -19,7 +22,7 @@ export default function StepReview({ formData, jumpTo, canJumpTo }) {
         ['Street', formData.street || '—'],
         ['City', formData.city || '—'],
         ['State/Province', formData.state || '—'],
-        ['Postal Code', formData.postalCode || '—'],
+        ['Pincode', formData.postalCode || '—'],
         ['District', formData.district || '—'],
         ['Taluk', formData.taluk || '—'],
       ],
@@ -33,19 +36,10 @@ export default function StepReview({ formData, jumpTo, canJumpTo }) {
       ],
     },
     {
-      title: 'Preferences',
+      title: 'Additional Info',
       index: 2,
       fields: [
-        ['Plan', formData.preference || '—'],
-        ['Newsletter', formData.newsletter ? 'Yes' : 'No'],
-        ['Notify: Email', formData.notifyEmail ? 'On' : 'Off'],
-        ['Notify: SMS', formData.notifySMS ? 'On' : 'Off'],
-        ['Notify: Push', formData.notifyPush ? 'On' : 'Off'],
-        ['Frequency', formData.notifyFrequency || '—'],
-        ['Topics', Object.keys(formData)
-          .filter((k) => k.startsWith('topic_') && formData[k])
-          .map((k) => k.replace('topic_', '').replace(/_/g, ' '))
-          .join(', ') || '—'],
+        ['Note', '—'],
       ],
     },
   ];
@@ -74,16 +68,26 @@ export default function StepReview({ formData, jumpTo, canJumpTo }) {
           </dl>
         </div>
       ))}
+
       <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
         <h4 className="text-sm font-medium text-amber-800">Confirmation</h4>
         <p className="text-sm text-amber-800/90 mt-1">
-          By submitting, you confirm the information provided is accurate and consent to receive
-          notifications per your selected preferences.
+          Please confirm the information is correct before submitting.
         </p>
+        <div className="mt-3 flex items-center">
+          <input
+            id="confirm"
+            name="confirm"
+            type="checkbox"
+            checked={!!confirmChecked}
+            onChange={(e) => setConfirmChecked(e.target.checked)}
+            className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-blue-300"
+          />
+          <label htmlFor="confirm" className="ml-2 block text-sm text-amber-900">
+            I confirm the information is correct
+          </label>
+        </div>
       </div>
-      <p className="text-sm text-gray-600">
-        Review your information and click Submit when ready.
-      </p>
     </div>
   );
 }

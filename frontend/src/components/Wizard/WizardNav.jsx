@@ -32,6 +32,7 @@ export default function WizardNav({
             variant="primary"
             onClick={onNext}
             className="w-full sm:w-auto"
+            disabled={!canProceed}
           >
             Next
           </Button>
@@ -41,6 +42,7 @@ export default function WizardNav({
             onClick={onSubmit}
             loading={submitting}
             className="w-full sm:w-auto"
+            disabled={!canProceed}
           >
             Submit
           </Button>
