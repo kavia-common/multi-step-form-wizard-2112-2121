@@ -23,7 +23,7 @@ body {
 }
 
 @layer base {
-  h1 { @apply text-2xl md:text-3xl font-semibold text-text; }
+  h1 { @apply text-3xl md:text-4xl font-semibold text-text; }
   h2 { @apply text-xl md:text-2xl font-semibold text-text; }
   p  { @apply text-sm text-gray-600; }
 }

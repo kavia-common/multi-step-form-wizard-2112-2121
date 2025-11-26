@@ -4,7 +4,7 @@ import Alert from '../common/Alert';
 /**
  * PUBLIC_INTERFACE
  */
-export default function StepImageUpload({ formData, setFieldValue, touched, markTouched, errors }) {
+export default function StepImageUpload({ formData, setFieldValue, touched, markTouched, errors, isEditMode = false, onSaveFromEdit }) {
   /** Image upload with preview; optional field with client-side checks. */
   const inputRef = useRef(null);
   const [preview, setPreview] = useState(formData.avatarPreview || '');
@@ -83,6 +83,18 @@ export default function StepImageUpload({ formData, setFieldValue, touched, mark
         <Alert kind="info" title="No image uploaded">
           You can skip this step or upload a profile image to personalize your account.
         </Alert>
+      )}
+
+      {isEditMode && (
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={onSaveFromEdit}
+            className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition-colors bg-secondary text-white hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
+          >
+            Save
+          </button>
+        </div>
       )}
     </div>
   );

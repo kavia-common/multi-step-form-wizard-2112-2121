@@ -37,6 +37,9 @@ export default function WizardContainer({
 
   const Current = useMemo(() => steps[currentStep].component, [steps, currentStep]);
 
+  // Track whether we navigated from the Review step for editing a specific section
+  const [returnToReview, setReturnToReview] = useState(false);
+
   const onSubmit = async () => {
     setSubmitting(true);
     const result = await submit();
@@ -78,7 +81,11 @@ export default function WizardContainer({
   return (
     <Card className="w-full max-w-2xl mx-auto p-6 md:p-8">
       <div className="space-y-6">
-        <ProgressBar current={currentStep} total={total} />
+        <ProgressBar
+          current={currentStep}
+          total={total}
+          labels={steps.map((s) => s.title)}
+        />
 
         {steps[currentStep].title && (
           <div>
@@ -97,8 +104,22 @@ export default function WizardContainer({
           touched={touched}
           markTouched={markTouched}
           errors={errors}
-          jumpTo={jumpTo}
+          jumpTo={(idx) => {
+            // if jumping from review to edit, set flag
+            if (currentStep === total - 1 && idx < total - 1) {
+              setReturnToReview(true);
+            }
+            jumpTo(idx);
+          }}
           canJumpTo={canJumpTo}
+          isEditMode={returnToReview && currentStep < total - 1}
+          onSaveFromEdit={() => {
+            // Validate current step before returning
+            if (isStepValid) {
+              setReturnToReview(false);
+              jumpTo(total - 1);
+            }
+          }}
         />
 
         {showGenericBanner && (
@@ -116,6 +137,13 @@ export default function WizardContainer({
           isFinal={currentStep === total - 1}
           canProceed={isStepValid}
           submitting={submitting}
+          isEditMode={returnToReview && currentStep < total - 1}
+          onSaveFromEdit={() => {
+            if (isStepValid) {
+              setReturnToReview(false);
+              jumpTo(total - 1);
+            }
+          }}
         />
       </div>
     </Card>

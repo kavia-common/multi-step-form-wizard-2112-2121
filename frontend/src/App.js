@@ -23,8 +23,8 @@ function App() {
     <div className="min-h-screen bg-ocean-gradient from-blue-500/10 to-gray-50">
       <div className="mx-auto max-w-5xl px-4 py-8 md:py-12">
         <div className="text-center mb-6 md:mb-8">
-          <h1 className="text-3xl md:text-4xl font-semibold text-text">Create your account</h1>
-          <p className="text-gray-600 mt-2">Follow the steps to set up your profile</p>
+          <h1 className="text-3xl md:text-4xl font-semibold text-text tracking-tight">Create your account</h1>
+          <p className="text-gray-600 mt-2 text-sm md:text-base">Follow the steps to set up your profile</p>
         </div>
         <WizardContainer steps={steps} hook={hook} />
         <footer className="text-center text-xs text-gray-500 mt-6">

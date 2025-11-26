@@ -2,7 +2,7 @@ import React from 'react';
 
 // PUBLIC_INTERFACE
 export default function StepReview({ formData, setFieldValue, touched, markTouched, errors, jumpTo, canJumpTo }) {
-  /** Present review of entered data with links to edit specific steps and confirmation checkbox. */
+  /** Present review of entered data with edit links to jump to a specific step. */
   const entries = [
     {
       title: 'Account',
@@ -37,22 +37,23 @@ export default function StepReview({ formData, setFieldValue, touched, markTouch
   return (
     <div className="space-y-4">
       {entries.map((section) => (
-        <div key={section.title} className="border border-gray-200 rounded-lg p-4">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-medium text-text">{section.title}</h3>
+        <div key={section.title} className="rounded-lg p-4 bg-[#F7F9FC] border border-[#E6E8EE]">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-text">{section.title}</h3>
             <button
-              className="text-sm text-primary hover:underline disabled:text-gray-400"
+              type="button"
+              className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-blue-50 text-primary hover:bg-blue-100 disabled:bg-gray-100 disabled:text-gray-400"
               onClick={() => jumpTo(section.index)}
               disabled={!canJumpTo(section.index)}
             >
               Edit
             </button>
           </div>
-          <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+          <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
             {section.fields.map(([k, v]) => (
-              <div key={k} className="flex">
-                <dt className="w-32 text-gray-500">{k}</dt>
-                <dd className="text-text">{String(v)}</dd>
+              <div key={k} className="py-2 border-t border-[#EDF2F8] first:border-t-0">
+                <dt className="text-[12.5px] font-semibold text-gray-600">{k}</dt>
+                <dd className="text-[13.5px] font-semibold text-text mt-1">{String(v)}</dd>
               </div>
             ))}
           </dl>
@@ -68,7 +69,7 @@ export default function StepReview({ formData, setFieldValue, touched, markTouch
         </div>
       ))}
 
-      <div className="border border-gray-200 rounded-lg p-4">
+      <div className="rounded-lg p-4 border border-[#E6E8EE]">
         <label className="flex items-start gap-3">
           <input
             id="confirm"
