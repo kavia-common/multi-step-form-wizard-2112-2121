@@ -27,6 +27,8 @@ export default function WizardContainer({
     reset,
     jumpTo,
     canJumpTo,
+    attempted,
+    interacted,
   } = hook;
 
   const [submitted, setSubmitted] = useState(false);
@@ -69,6 +71,10 @@ export default function WizardContainer({
     );
   }
 
+  // Determine if the generic banner should be shown:
+  // - Only show when the step is invalid AND (user attempted to proceed OR there has been field interaction)
+  const showGenericBanner = !isStepValid && (attempted || interacted);
+
   return (
     <Card className="w-full max-w-2xl mx-auto p-6 md:p-8">
       <div className="space-y-6">
@@ -95,7 +101,7 @@ export default function WizardContainer({
           canJumpTo={canJumpTo}
         />
 
-        {!isStepValid && (
+        {showGenericBanner && (
           <Alert kind="error" title="Please fix the errors above">
             Some fields are missing or invalid. Correct them to continue.
           </Alert>

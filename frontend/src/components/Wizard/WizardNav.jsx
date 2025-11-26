@@ -16,21 +16,21 @@ export default function WizardNav({
   return (
     <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
       <div className="flex-1">
-        <Button
-          variant="ghost"
-          onClick={onBack}
-          disabled={currentStep === 0}
-          className="w-full sm:w-auto"
-        >
-          Back
-        </Button>
+        {currentStep > 0 && (
+          <Button
+            variant="ghost"
+            onClick={onBack}
+            className="w-full sm:w-auto"
+          >
+            Back
+          </Button>
+        )}
       </div>
       <div className="flex-1 sm:text-right">
         {!isFinal ? (
           <Button
             variant="primary"
             onClick={onNext}
-            disabled={!canProceed}
             className="w-full sm:w-auto"
           >
             Next

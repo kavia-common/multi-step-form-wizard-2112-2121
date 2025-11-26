@@ -12,6 +12,7 @@ export function useWizard(steps) {
    * - next/back navigation with validation
    * - direct jump navigation with gatekeeping
    * - sessionStorage persistence
+   * - user interaction flags to control validation UX
    */
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState(() => {
@@ -24,9 +25,19 @@ export function useWizard(steps) {
   });
   const [touched, setTouched] = useState({});
   const [errors, setErrors] = useState({});
+  // Track whether a navigation attempt (next/submit) has occurred on the current step
+  const [attempted, setAttempted] = useState(false);
+  // Track if any field has been interacted with on the current step at least once
+  const [interacted, setInteracted] = useState(false);
 
   const stepKeys = useMemo(() => ['personal', 'contact', 'preferences', 'review'], []);
   const currentKey = stepKeys[currentStep] || stepKeys[0];
+
+  // Reset attempt/interacted flags when step changes
+  useEffect(() => {
+    setAttempted(false);
+    setInteracted(false);
+  }, [currentStep]);
 
   // Persist
   useEffect(() => {
@@ -43,6 +54,7 @@ export function useWizard(steps) {
 
   const markTouched = useCallback((name) => {
     setTouched((prev) => ({ ...prev, [name]: true }));
+    setInteracted(true);
   }, []);
 
   const validateCurrent = useCallback(() => {
@@ -59,11 +71,13 @@ export function useWizard(steps) {
   }, [currentKey, formData]);
 
   const next = useCallback(() => {
+    // Mark that a navigation attempt was made
+    setAttempted(true);
     const result = validateCurrent();
     const hasErrors = Object.values(result).some(Boolean);
     if (!hasErrors && currentStep < steps.length - 1) {
       setCurrentStep((s) => s + 1);
-    } else {
+    } else if (hasErrors) {
       // mark all fields touched on error to trigger UI feedback
       const schema = stepSchemas[currentKey] || {};
       const names = Object.keys(schema);
@@ -72,6 +86,7 @@ export function useWizard(steps) {
         names.forEach((n) => (upd[n] = true));
         return upd;
       });
+      setInteracted(true);
     }
   }, [currentStep, steps.length, validateCurrent, currentKey]);
 
@@ -106,6 +121,8 @@ export function useWizard(steps) {
     setTouched({});
     setErrors({});
     setCurrentStep(0);
+    setAttempted(false);
+    setInteracted(false);
     try {
       sessionStorage.removeItem(STORAGE_KEY);
     } catch {
@@ -114,6 +131,7 @@ export function useWizard(steps) {
   }, []);
 
   const submit = useCallback(async () => {
+    setAttempted(true);
     const result = validateCurrent();
     const hasErrors = Object.values(result).some(Boolean);
     if (hasErrors) {
@@ -124,6 +142,7 @@ export function useWizard(steps) {
         names.forEach((n) => (upd[n] = true));
         return upd;
       });
+      setInteracted(true);
       return { ok: false, errors: result };
     }
     // simulate submit
@@ -148,5 +167,8 @@ export function useWizard(steps) {
     canJumpTo,
     reset,
     submit,
+    // Flags for UI banner logic
+    attempted,
+    interacted,
   };
 }
