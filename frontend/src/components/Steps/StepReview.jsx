@@ -1,31 +1,35 @@
 import React from 'react';
 
 // PUBLIC_INTERFACE
-export default function StepReview({ formData, jumpTo, canJumpTo }) {
-  /** Present review of entered data with links to edit specific steps. */
+export default function StepReview({ formData, setFieldValue, touched, markTouched, errors, jumpTo, canJumpTo }) {
+  /** Present review of entered data with links to edit specific steps and confirmation checkbox. */
   const entries = [
     {
-      title: 'Personal',
+      title: 'Account',
       index: 0,
+      fields: [
+        ['Username', formData.username || '—'],
+        ['Email', formData.email || '—'],
+      ],
+    },
+    {
+      title: 'Personal',
+      index: 1,
       fields: [
         ['First Name', formData.firstName || '—'],
         ['Last Name', formData.lastName || '—'],
-      ],
-    },
-    {
-      title: 'Contact',
-      index: 1,
-      fields: [
-        ['Email', formData.email || '—'],
+        ['Gender', formData.gender || '—'],
+        ['DOB', formData.dob || '—'],
         ['Phone', formData.phone || '—'],
+        ['State', formData.state || '—'],
+        ['City', formData.city || '—'],
       ],
     },
     {
-      title: 'Preferences',
+      title: 'Image',
       index: 2,
       fields: [
-        ['Plan', formData.preference || '—'],
-        ['Newsletter', formData.newsletter ? 'Yes' : 'No'],
+        ['Uploaded', formData.avatarFile ? (formData.avatarFile.name || 'Yes') : 'No'],
       ],
     },
   ];
@@ -52,8 +56,38 @@ export default function StepReview({ formData, jumpTo, canJumpTo }) {
               </div>
             ))}
           </dl>
+          {section.title === 'Image' && formData.avatarPreview && (
+            <div className="mt-3">
+              <img
+                src={formData.avatarPreview}
+                alt="Uploaded preview"
+                className="h-24 w-24 rounded-lg object-cover border border-gray-200"
+              />
+            </div>
+          )}
         </div>
       ))}
+
+      <div className="border border-gray-200 rounded-lg p-4">
+        <label className="flex items-start gap-3">
+          <input
+            id="confirm"
+            name="confirm"
+            type="checkbox"
+            className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-blue-300"
+            checked={!!formData.confirm}
+            onChange={(e) => setFieldValue('confirm', e.target.checked)}
+            onBlur={() => markTouched('confirm')}
+          />
+          <span className="text-sm text-gray-700">
+            I confirm the information is accurate and agree to the Terms.
+          </span>
+        </label>
+        {touched.confirm && errors.confirm && (
+          <p className="mt-1 text-sm text-error">{errors.confirm}</p>
+        )}
+      </div>
+
       <p className="text-sm text-gray-600">
         Review your information and click Submit when ready.
       </p>

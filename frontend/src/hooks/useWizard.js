@@ -30,7 +30,8 @@ export function useWizard(steps) {
   // Track if any field has been interacted with on the current step at least once
   const [interacted, setInteracted] = useState(false);
 
-  const stepKeys = useMemo(() => ['personal', 'contact', 'preferences', 'review'], []);
+  // Updated step keys to match new flow
+  const stepKeys = useMemo(() => ['account', 'personalInfo', 'image', 'review'], []);
   const currentKey = stepKeys[currentStep] || stepKeys[0];
 
   // Reset attempt/interacted flags when step changes
@@ -57,18 +58,24 @@ export function useWizard(steps) {
     setInteracted(true);
   }, []);
 
+  // Helper: get the schema (supports account step function requiring data)
+  const getSchemaForKey = useCallback((key) => {
+    const s = stepSchemas[key];
+    return typeof s === 'function' ? s(() => formData) : (s || {});
+  }, [formData]);
+
   const validateCurrent = useCallback(() => {
-    const schema = stepSchemas[currentKey] || {};
+    const schema = getSchemaForKey(currentKey);
     const result = validateSchema(schema, formData);
     setErrors(result);
     return result;
-  }, [currentKey, formData]);
+  }, [currentKey, formData, getSchemaForKey]);
 
   const isStepValid = useMemo(() => {
-    const schema = stepSchemas[currentKey] || {};
+    const schema = getSchemaForKey(currentKey);
     const result = validateSchema(schema, formData);
     return Object.values(result).every((v) => !v);
-  }, [currentKey, formData]);
+  }, [currentKey, formData, getSchemaForKey]);
 
   const next = useCallback(() => {
     // Mark that a navigation attempt was made
@@ -79,7 +86,7 @@ export function useWizard(steps) {
       setCurrentStep((s) => s + 1);
     } else if (hasErrors) {
       // mark all fields touched on error to trigger UI feedback
-      const schema = stepSchemas[currentKey] || {};
+      const schema = getSchemaForKey(currentKey);
       const names = Object.keys(schema);
       setTouched((prev) => {
         const upd = { ...prev };
@@ -88,7 +95,7 @@ export function useWizard(steps) {
       });
       setInteracted(true);
     }
-  }, [currentStep, steps.length, validateCurrent, currentKey]);
+  }, [currentStep, steps.length, validateCurrent, currentKey, getSchemaForKey]);
 
   const back = useCallback(() => {
     if (currentStep > 0) setCurrentStep((s) => s - 1);
@@ -100,13 +107,13 @@ export function useWizard(steps) {
       // Ensure previous steps are valid
       for (let i = 0; i < index; i++) {
         const key = stepKeys[i];
-        const schema = stepSchemas[key] || {};
+        const schema = getSchemaForKey(key);
         const result = validateSchema(schema, formData);
         if (Object.values(result).some(Boolean)) return false;
       }
       return true;
     },
-    [currentStep, formData, stepKeys]
+    [currentStep, formData, stepKeys, getSchemaForKey]
   );
 
   const jumpTo = useCallback(
@@ -135,7 +142,7 @@ export function useWizard(steps) {
     const result = validateCurrent();
     const hasErrors = Object.values(result).some(Boolean);
     if (hasErrors) {
-      const schema = stepSchemas[currentKey] || {};
+      const schema = getSchemaForKey(currentKey);
       const names = Object.keys(schema);
       setTouched((prev) => {
         const upd = { ...prev };
@@ -148,7 +155,7 @@ export function useWizard(steps) {
     // simulate submit
     await new Promise((r) => setTimeout(r, 400));
     return { ok: true };
-  }, [validateCurrent, currentKey]);
+  }, [validateCurrent, currentKey, getSchemaForKey]);
 
   return {
     currentStep,

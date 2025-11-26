@@ -14,7 +14,7 @@ export default function WizardNav({
 }) {
   /** Navigation controls for the wizard. */
   return (
-    <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+    <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
       <div className="flex-1">
         {currentStep > 0 && (
           <Button
@@ -31,6 +31,7 @@ export default function WizardNav({
           <Button
             variant="primary"
             onClick={onNext}
+            disabled={!canProceed}
             className="w-full sm:w-auto"
           >
             Next
@@ -40,6 +41,7 @@ export default function WizardNav({
             variant="secondary"
             onClick={onSubmit}
             loading={submitting}
+            disabled={!canProceed}
             className="w-full sm:w-auto"
           >
             Submit
