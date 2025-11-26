@@ -4,7 +4,7 @@ import { useWizard } from './hooks/useWizard';
 import WizardContainer from './components/Wizard/WizardContainer';
 import StepPersonal from './components/Steps/StepPersonal';
 import StepContact from './components/Steps/StepContact';
-import StepAdditionalInfo from './components/Steps/StepAdditionalInfo';
+import StepPreferences from './components/Steps/StepPreferences';
 import StepReview from './components/Steps/StepReview';
 
 // PUBLIC_INTERFACE
@@ -13,7 +13,7 @@ function App() {
   const steps = [
     { title: 'Personal Details', description: 'Tell us about yourself', component: StepPersonal },
     { title: 'Contact Information', description: 'How can we reach you?', component: StepContact },
-    { title: 'Additional Info', description: 'Provide any extra details (placeholder)', component: StepAdditionalInfo },
+    { title: 'Preferences', description: 'Choose your plan and options', component: StepPreferences },
     { title: 'Review', description: 'Confirm your information before submitting', component: StepReview },
   ];
 

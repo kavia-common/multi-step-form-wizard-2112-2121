@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { stepSchemas, validateSchema, getContactSchema } from '../utils/validation';
+import { stepSchemas, validateSchema } from '../utils/validation';
 
-const STORAGE_KEY = 'wizard_form_data_v2';
+const STORAGE_KEY = 'wizard_form_data_v1';
 
 // PUBLIC_INTERFACE
 export function useWizard(steps) {
@@ -30,7 +30,7 @@ export function useWizard(steps) {
   // Track if any field has been interacted with on the current step at least once
   const [interacted, setInteracted] = useState(false);
 
-  const stepKeys = useMemo(() => ['personal', 'contact', 'additional', 'review'], []);
+  const stepKeys = useMemo(() => ['personal', 'contact', 'preferences', 'review'], []);
   const currentKey = stepKeys[currentStep] || stepKeys[0];
 
   // Reset attempt/interacted flags when step changes
@@ -57,29 +57,18 @@ export function useWizard(steps) {
     setInteracted(true);
   }, []);
 
-  const schemaForKey = useCallback(
-    (key) => {
-      if (key === 'contact') {
-        const getIso = () => formData.phoneCountry;
-        return getContactSchema(getIso);
-      }
-      return stepSchemas[key] || {};
-    },
-    [formData.phoneCountry]
-  );
-
   const validateCurrent = useCallback(() => {
-    const schema = schemaForKey(currentKey);
+    const schema = stepSchemas[currentKey] || {};
     const result = validateSchema(schema, formData);
     setErrors(result);
     return result;
-  }, [currentKey, formData, schemaForKey]);
+  }, [currentKey, formData]);
 
   const isStepValid = useMemo(() => {
-    const schema = schemaForKey(currentKey);
+    const schema = stepSchemas[currentKey] || {};
     const result = validateSchema(schema, formData);
     return Object.values(result).every((v) => !v);
-  }, [currentKey, formData, schemaForKey]);
+  }, [currentKey, formData]);
 
   const next = useCallback(() => {
     // Mark that a navigation attempt was made
@@ -141,8 +130,7 @@ export function useWizard(steps) {
     }
   }, []);
 
-  const submit = useCallback(async (options = {}) => {
-    const { confirmChecked } = options;
+  const submit = useCallback(async () => {
     setAttempted(true);
     const result = validateCurrent();
     const hasErrors = Object.values(result).some(Boolean);
@@ -156,10 +144,6 @@ export function useWizard(steps) {
       });
       setInteracted(true);
       return { ok: false, errors: result };
-    }
-    // If on review step, require confirmation checkbox
-    if (currentKey === 'review' && !confirmChecked) {
-      return { ok: false, errors: { confirm: 'Please confirm before submitting.' } };
     }
     // simulate submit
     await new Promise((r) => setTimeout(r, 400));
