@@ -35,11 +35,11 @@ export default function StepReview({ formData, setFieldValue, touched, markTouch
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {entries.map((section) => (
         <div key={section.title} className="rounded-[10px] p-4 bg-[color:var(--surface-2)] border border-[color:var(--border-subtle)]">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-[color:var(--text-strong)]">{section.title}</h3>
+            <h3 className="text-[15px] font-semibold text-[color:var(--text-strong)]">{section.title}</h3>
             <button
               type="button"
               className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-[color:var(--accent-100)] text-primary hover:bg-blue-100 disabled:bg-gray-100 disabled:text-gray-400"

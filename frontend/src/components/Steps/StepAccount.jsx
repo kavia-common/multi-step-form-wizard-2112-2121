@@ -10,7 +10,7 @@ export default function StepAccount({ formData, setFieldValue, touched, markTouc
   const [showConfirm, setShowConfirm] = useState(false);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <Input
         label="Username"
         name="username"
@@ -48,7 +48,7 @@ export default function StepAccount({ formData, setFieldValue, touched, markTouc
           <button
             type="button"
             onClick={() => setShowPwd((s) => !s)}
-            className="absolute right-3 top-9 text-sm text-gray-500 hover:text-gray-700"
+            className="absolute right-3 top-9 text-xs font-medium text-[color:var(--text-muted)] hover:text-[color:var(--text-medium)]"
             aria-label={showPwd ? 'Hide password' : 'Show password'}
           >
             {showPwd ? 'Hide' : 'Show'}
@@ -69,13 +69,14 @@ export default function StepAccount({ formData, setFieldValue, touched, markTouc
           <button
             type="button"
             onClick={() => setShowConfirm((s) => !s)}
-            className="absolute right-3 top-9 text-sm text-gray-500 hover:text-gray-700"
+            className="absolute right-3 top-9 text-xs font-medium text-[color:var(--text-muted)] hover:text-[color:var(--text-medium)]"
             aria-label={showConfirm ? 'Hide confirm password' : 'Show confirm password'}
           >
             {showConfirm ? 'Hide' : 'Show'}
           </button>
         </div>
       </div>
+      <p className="helper-text">Use a strong password with at least 8 characters.</p>
     </div>
   );
 }

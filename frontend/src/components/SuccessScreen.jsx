@@ -6,7 +6,7 @@ import Button from './common/Button';
  * PUBLIC_INTERFACE
  */
 export default function SuccessScreen({ username, avatarPreview, onReset }) {
-  /** Displays post-submit success with image and username, Ocean theme visuals. */
+  /** Displays post-submit success with image only per spec (no username/details). */
   return (
     <Card className="w-full max-w-xl mx-auto p-6 md:p-8">
       <div className="text-center space-y-4">
@@ -17,11 +17,6 @@ export default function SuccessScreen({ username, avatarPreview, onReset }) {
         </div>
 
         <h1 className="text-2xl font-semibold text-text">Profile created</h1>
-        {username && (
-          <p className="text-gray-600">
-            Welcome, <span className="font-semibold text-text">{username}</span>!
-          </p>
-        )}
 
         <div className="flex items-center justify-center">
           {avatarPreview ? (
