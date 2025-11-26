@@ -1,0 +1,117 @@
+import React, { useMemo, useState } from 'react';
+import Card from '../common/Card';
+import ProgressBar from './ProgressBar';
+import WizardNav from './WizardNav';
+import Alert from '../common/Alert';
+
+// PUBLIC_INTERFACE
+export default function WizardContainer({
+  steps,
+  hook,
+}) {
+  /**
+   * A wrapper that renders the current step component, a progress bar,
+   * and navigation controls.
+   */
+  const {
+    currentStep,
+    formData,
+    setFieldValue,
+    touched,
+    markTouched,
+    errors,
+    isStepValid,
+    next,
+    back,
+    submit,
+    reset,
+    jumpTo,
+    canJumpTo,
+  } = hook;
+
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const total = steps.length;
+
+  const Current = useMemo(() => steps[currentStep].component, [steps, currentStep]);
+
+  const onSubmit = async () => {
+    setSubmitting(true);
+    const result = await submit();
+    setSubmitting(false);
+    if (result.ok) {
+      setSubmitted(true);
+      // optional: clear storage but keep data for review
+    }
+  };
+
+  if (submitted) {
+    return (
+      <Card className="w-full max-w-xl mx-auto p-6 md:p-8">
+        <div className="text-center space-y-3">
+          <div className="mx-auto w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+            <svg className="w-7 h-7 text-green-600" viewBox="0 0 24 24" fill="none">
+              <path d="M20 7L9 18l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          <h1 className="text-2xl font-semibold text-text">All set!</h1>
+          <p className="text-gray-600">Your information was submitted successfully.</p>
+          <div className="pt-2">
+            <button
+              onClick={() => { reset(); setSubmitted(false); }}
+              className="text-primary hover:underline font-medium"
+            >
+              Submit another response
+            </button>
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="w-full max-w-2xl mx-auto p-6 md:p-8">
+      <div className="space-y-6">
+        <ProgressBar current={currentStep} total={total} />
+
+        {steps[currentStep].title && (
+          <div>
+            <h2 className="text-xl md:text-2xl font-semibold text-text">
+              {steps[currentStep].title}
+            </h2>
+            {steps[currentStep].description && (
+              <p className="text-gray-600 mt-1">{steps[currentStep].description}</p>
+            )}
+          </div>
+        )}
+
+        <Current
+          formData={formData}
+          setFieldValue={setFieldValue}
+          touched={touched}
+          markTouched={markTouched}
+          errors={errors}
+          jumpTo={jumpTo}
+          canJumpTo={canJumpTo}
+        />
+
+        {!isStepValid && (
+          <Alert kind="error" title="Please fix the errors above">
+            Some fields are missing or invalid. Correct them to continue.
+          </Alert>
+        )}
+
+        <WizardNav
+          currentStep={currentStep}
+          totalSteps={total}
+          onBack={back}
+          onNext={next}
+          onSubmit={onSubmit}
+          isFinal={currentStep === total - 1}
+          canProceed={isStepValid}
+          submitting={submitting}
+        />
+      </div>
+    </Card>
+  );
+}

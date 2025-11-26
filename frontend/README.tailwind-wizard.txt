@@ -1,0 +1,26 @@
+Created/Modified files:
+- frontend/package.json (add Tailwind/postcss/autoprefixer devDependencies)
+- frontend/tailwind.config.js
+- frontend/postcss.config.js
+- frontend/src/index.css (Tailwind layers + minimal base styles)
+- frontend/src/App.css (trimmed)
+- frontend/src/App.js (wizard integration)
+- frontend/src/theme/tokens.js
+- frontend/src/utils/validation.js
+- frontend/src/hooks/useWizard.js
+- frontend/src/components/common/Card.jsx
+- frontend/src/components/common/Button.jsx
+- frontend/src/components/common/Input.jsx
+- frontend/src/components/common/Select.jsx
+- frontend/src/components/common/Alert.jsx
+- frontend/src/components/Wizard/ProgressBar.jsx
+- frontend/src/components/Wizard/WizardNav.jsx
+- frontend/src/components/Wizard/WizardContainer.jsx
+- frontend/src/components/Steps/StepPersonal.jsx
+- frontend/src/components/Steps/StepContact.jsx
+- frontend/src/components/Steps/StepPreferences.jsx
+- frontend/src/components/Steps/StepReview.jsx
+Notes:
+- Uses sessionStorage to persist form draft.
+- Responsive mobile-first layout with full-width buttons on small screens.
+- Ocean Professional theme colors integrated via Tailwind config.

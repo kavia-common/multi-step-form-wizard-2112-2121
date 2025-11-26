@@ -1,13 +1,29 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Minimal global styles aligned with Ocean Professional theme */
+:root {
+  --ocean-bg: #f9fafb;
+  --ocean-surface: #ffffff;
+  --ocean-text: #111827;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  @apply bg-background text-text antialiased;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@layer base {
+  h1 { @apply text-2xl md:text-3xl font-semibold text-text; }
+  h2 { @apply text-xl md:text-2xl font-semibold text-text; }
+  p  { @apply text-sm text-gray-600; }
 }
