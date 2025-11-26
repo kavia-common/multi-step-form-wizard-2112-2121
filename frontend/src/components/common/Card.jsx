@@ -5,12 +5,7 @@ import { cn } from '../../theme/tokens';
 export default function Card({ children, className }) {
   /** A surface card with soft shadow and rounded corners. */
   return (
-    <div
-      className={cn(
-        'ocean-card',
-        className
-      )}
-    >
+    <div className={cn('ocean-card', className)}>
       {children}
     </div>
   );

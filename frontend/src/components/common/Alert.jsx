@@ -10,7 +10,7 @@ export default function Alert({ kind = 'info', title, children, className }) {
     error: 'bg-red-50 text-red-700 border-red-200',
   };
   return (
-    <div className={cn('w-full border rounded-lg px-4 py-3', styles[kind], className)}>
+    <div className={cn('w-full border rounded-[10px] px-4 py-3', styles[kind], className)}>
       {title && <div className="font-semibold mb-1">{title}</div>}
       <div className="text-sm leading-relaxed">{children}</div>
     </div>

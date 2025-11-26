@@ -17,7 +17,7 @@ export default function Input({
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor={name} className="block mb-2">
           {label} {required && <span className="text-error">*</span>}
         </label>
       )}
@@ -32,14 +32,14 @@ export default function Input({
         className={cn(
           'ocean-input',
           error
-            ? 'border-error focus:ring-red-200'
-            : 'border-[#D7DCE8] focus:border-primary focus:ring-blue-200'
+            ? 'border-[color:var(--danger)] focus:ring-red-200'
+            : 'border-[#D7DCE8] focus:border-[color:var(--accent)] focus:ring-[color:var(--focus-ring)]'
         )}
         aria-invalid={!!error}
         aria-describedby={error ? `${name}-error` : undefined}
       />
       {error && (
-        <p id={`${name}-error`} className="mt-1 text-sm text-error">
+        <p id={`${name}-error`} className="field-error">
           {error}
         </p>
       )}

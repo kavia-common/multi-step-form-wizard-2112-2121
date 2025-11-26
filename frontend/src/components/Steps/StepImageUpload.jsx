@@ -42,8 +42,8 @@ export default function StepImageUpload({ formData, setFieldValue, touched, mark
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Profile Image <span className="text-gray-400 font-normal">(JPEG/PNG up to 3MB)</span>
+        <label className="block mb-2">
+          Profile Image <span className="text-[color:var(--text-muted)] font-normal">(JPEG/PNG up to 3MB)</span>
         </label>
         <input
           ref={inputRef}
@@ -53,12 +53,12 @@ export default function StepImageUpload({ formData, setFieldValue, touched, mark
           accept="image/png,image/jpeg"
           onChange={onFileChange}
           onBlur={() => markTouched('avatarFile')}
-          className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:rounded-lg file:border file:border-gray-300 file:text-sm file:font-medium file:bg-white file:text-gray-700 hover:file:bg-gray-50"
+          className="block w-full text-sm text-[color:var(--text-medium)] file:mr-4 file:h-[36px] file:px-3 file:rounded-[10px] file:border file:border-[#D7DCE8] file:text-sm file:font-medium file:bg-white file:text-[color:var(--text-strong)] hover:file:bg-[#F4F6FB]"
           aria-invalid={!!error}
           aria-describedby={error ? 'avatarFile-error' : undefined}
         />
         {error && (
-          <p id="avatarFile-error" className="mt-1 text-sm text-error">
+          <p id="avatarFile-error" className="field-error">
             {error}
           </p>
         )}
@@ -90,7 +90,7 @@ export default function StepImageUpload({ formData, setFieldValue, touched, mark
           <button
             type="button"
             onClick={onSaveFromEdit}
-            className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition-colors bg-secondary text-white hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
+            className="inline-flex items-center justify-center rounded-[12px] h-[46px] px-5 font-semibold transition-colors bg-secondary text-white hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
           >
             Save
           </button>

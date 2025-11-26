@@ -18,7 +18,7 @@ export default function WizardNav({
   const showBack = currentStep > 0; // keep first-step Back hidden
 
   return (
-    <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+    <div className="mt-6 pt-4 border-t border-[color:var(--divider)] flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
       <div className="flex-1">
         {showBack && (
           <Button

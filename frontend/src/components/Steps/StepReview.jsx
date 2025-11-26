@@ -37,12 +37,12 @@ export default function StepReview({ formData, setFieldValue, touched, markTouch
   return (
     <div className="space-y-4">
       {entries.map((section) => (
-        <div key={section.title} className="rounded-lg p-4 bg-[#F7F9FC] border border-[#E6E8EE]">
+        <div key={section.title} className="rounded-[10px] p-4 bg-[color:var(--surface-2)] border border-[color:var(--border-subtle)]">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-text">{section.title}</h3>
+            <h3 className="font-semibold text-[color:var(--text-strong)]">{section.title}</h3>
             <button
               type="button"
-              className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-blue-50 text-primary hover:bg-blue-100 disabled:bg-gray-100 disabled:text-gray-400"
+              className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-[color:var(--accent-100)] text-primary hover:bg-blue-100 disabled:bg-gray-100 disabled:text-gray-400"
               onClick={() => jumpTo(section.index)}
               disabled={!canJumpTo(section.index)}
             >
@@ -52,8 +52,8 @@ export default function StepReview({ formData, setFieldValue, touched, markTouch
           <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
             {section.fields.map(([k, v]) => (
               <div key={k} className="py-2 border-t border-[#EDF2F8] first:border-t-0">
-                <dt className="text-[12.5px] font-semibold text-gray-600">{k}</dt>
-                <dd className="text-[13.5px] font-semibold text-text mt-1">{String(v)}</dd>
+                <dt className="text-[12.5px] font-semibold text-[color:var(--text-medium)]">{k}</dt>
+                <dd className="text-[13.5px] font-semibold text-[color:var(--text-strong)] mt-1">{String(v)}</dd>
               </div>
             ))}
           </dl>
@@ -69,7 +69,7 @@ export default function StepReview({ formData, setFieldValue, touched, markTouch
         </div>
       ))}
 
-      <div className="rounded-lg p-4 border border-[#E6E8EE]">
+      <div className="rounded-[10px] p-4 border border-[color:var(--border-subtle)]">
         <label className="flex items-start gap-3">
           <input
             id="confirm"
@@ -80,16 +80,16 @@ export default function StepReview({ formData, setFieldValue, touched, markTouch
             onChange={(e) => setFieldValue('confirm', e.target.checked)}
             onBlur={() => markTouched('confirm')}
           />
-          <span className="text-sm text-gray-700">
+          <span className="text-sm text-[color:var(--text-medium)]">
             I confirm the information is accurate and agree to the Terms.
           </span>
         </label>
         {touched.confirm && errors.confirm && (
-          <p className="mt-1 text-sm text-error">{errors.confirm}</p>
+          <p className="field-error">{errors.confirm}</p>
         )}
       </div>
 
-      <p className="text-sm text-gray-600">
+      <p className="text-sm text-[color:var(--text-muted)]">
         Review your information and click Submit when ready.
       </p>
     </div>

@@ -68,7 +68,7 @@ export default function WizardContainer({
   const showGenericBanner = !isStepValid && (attempted || interacted);
 
   return (
-    <Card className="w-full max-w-2xl mx-auto p-6 md:p-8">
+    <Card className="w-full max-w-md md:max-w-2xl mx-auto p-6 md:p-7">
       <div className="space-y-6">
         <ProgressBar
           current={currentStep}
@@ -78,11 +78,11 @@ export default function WizardContainer({
 
         {steps[currentStep].title && (
           <div>
-            <h2 className="text-xl md:text-2xl font-semibold text-text">
+            <h2 className="text-xl md:text-2xl font-semibold text-[color:var(--text-strong)]">
               {steps[currentStep].title}
             </h2>
             {steps[currentStep].description && (
-              <p className="text-gray-600 mt-1">{steps[currentStep].description}</p>
+              <p className="mt-1 text-sm text-[color:var(--text-muted)]">{steps[currentStep].description}</p>
             )}
           </div>
         )}
@@ -112,7 +112,7 @@ export default function WizardContainer({
         />
 
         {showGenericBanner && (
-          <Alert kind="error" title="Please fix the errors above">
+          <Alert kind="error" title="Please fix the errors above" className="border-[color:var(--danger)]/30">
             Some fields are missing or invalid. Correct them to continue.
           </Alert>
         )}

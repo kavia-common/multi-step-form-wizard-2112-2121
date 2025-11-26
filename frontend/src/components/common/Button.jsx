@@ -14,9 +14,9 @@ export default function Button({
   /** Themed button with primary/secondary/ghost variants. */
   const base = 'ocean-btn';
   const variants = {
-    primary: 'bg-primary text-white hover:bg-blue-600 focus:ring-blue-500 shadow-[0_8px_16px_rgba(59,130,246,0.25)]',
-    secondary: 'bg-amber-500 text-white hover:bg-amber-600 focus:ring-amber-500 shadow-[0_6px_12px_rgba(245,158,11,0.25)]',
-    ghost: 'bg-transparent text-primary hover:bg-blue-50 focus:ring-blue-500 border border-blue-200',
+    primary: 'btn-primary',
+    secondary: 'btn-secondary',
+    ghost: 'btn-ghost',
   };
   return (
     <button
